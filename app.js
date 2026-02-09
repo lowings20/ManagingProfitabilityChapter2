@@ -65,7 +65,6 @@ function formatNumber(value) {
 
 // Update volume display
 function updateVolumeDisplay(volume) {
-  document.getElementById('volume-display').textContent = formatNumber(volume) + ' units';
   document.getElementById('analysis-volume').textContent = formatNumber(volume);
 }
 
