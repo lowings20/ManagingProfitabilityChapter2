@@ -213,22 +213,28 @@ header h1 {
 
 /* Formula Cards */
 .formula-card {
-  padding: 20px 24px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  background: var(--color-gray-100);
+  box-shadow: none;
+  border: 1px solid var(--color-gray-200);
 }
 
 .formula-header {
   display: flex;
-  align-items: baseline;
-  gap: 12px;
-  margin-bottom: 16px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .formula-header h2 {
   margin-bottom: 0;
+  font-size: 14px;
+  color: var(--color-gray-700);
 }
 
 .formula-equation {
-  font-size: 14px;
+  font-size: 12px;
   color: var(--color-gray-500);
   font-style: italic;
 }
@@ -236,41 +242,42 @@ header h1 {
 .formula-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 8px;
 }
 
 .formula-item {
   text-align: center;
-  padding: 16px 12px;
-  border-radius: 8px;
-  background: var(--color-gray-100);
+  padding: 8px 6px;
+  border-radius: 6px;
+  background: var(--color-white);
+  border-left: 3px solid;
 }
 
-.formula-item.copacker { border-left: 4px solid var(--color-copacker); }
-.formula-item.retrofit { border-left: 4px solid var(--color-retrofit); }
-.formula-item.newplant { border-left: 4px solid var(--color-newplant); }
+.formula-item.copacker { border-left-color: var(--color-copacker); }
+.formula-item.retrofit { border-left-color: var(--color-retrofit); }
+.formula-item.newplant { border-left-color: var(--color-newplant); }
 
 .formula-label {
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 600;
-  color: var(--color-gray-600);
-  margin-bottom: 6px;
+  color: var(--color-gray-500);
+  margin-bottom: 2px;
 }
 
 .formula-value {
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 700;
-  color: var(--color-blue-800);
+  color: var(--color-gray-800);
 }
 
 .formula-value.negative {
-  color: var(--color-gray-700);
+  color: var(--color-gray-600);
 }
 
 .formula-detail {
-  font-size: 11px;
-  color: var(--color-gray-500);
-  margin-top: 4px;
+  font-size: 10px;
+  color: var(--color-gray-400);
+  margin-top: 2px;
 }
 
 /* Profit Analysis */
@@ -456,14 +463,13 @@ header h1 {
     justify-content: space-between;
   }
 
-  .formula-grid,
-  .profit-grid {
-    grid-template-columns: 1fr;
+  .formula-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
   }
 
-  .formula-header {
-    flex-direction: column;
-    gap: 4px;
+  .profit-grid {
+    grid-template-columns: 1fr;
   }
 
   .breakeven-item {
