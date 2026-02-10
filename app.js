@@ -1,86 +1,153 @@
-// Break-Even Calculator
+// Break-Even Analysis Widget
 
-// Info content for each field
-const infoContent = {
-  fixed: {
-    title: "Fixed Costs",
-    text: "Fixed costs are expenses that stay the same regardless of how many units you produce. Examples include rent, salaries, insurance, and equipment leases. These costs must be paid whether you sell 1 unit or 1 million units."
-  },
-  price: {
-    title: "Selling Price per Unit",
-    text: "This is the price you charge customers for each unit of your product. Your selling price must be higher than your variable cost per unit to generate a positive contribution margin."
-  },
-  variable: {
-    title: "Variable Cost per Unit",
-    text: "Variable costs change based on how many units you produce. Examples include raw materials, packaging, shipping per unit, and sales commissions. The more you produce, the higher your total variable costs."
-  },
-  margin: {
-    title: "Contribution Margin",
-    text: "The contribution margin is the amount each unit sold contributes toward covering your fixed costs and generating profit. It's calculated as: Selling Price - Variable Cost. A higher contribution margin means you need to sell fewer units to break even."
-  },
-  breakeven: {
-    title: "Break-Even Volume",
-    text: "This is the number of units you need to sell to cover all your costs (both fixed and variable). At this volume, your total revenue equals your total costs — you're not making a profit, but you're not losing money either. Every unit sold above this number generates profit."
-  }
+// Core formulas
+const PRICE = 4.00;
+
+const options = {
+  coPacker: { name: "Co-Packer", vc: 2.80, fixed: 450000, color: "#3B82F6", key: "copacker" },
+  retrofit: { name: "Retrofit", vc: 1.80, fixed: 888000, color: "#F59E0B", key: "retrofit" },
+  newPlant: { name: "New Plant", vc: 0.80, fixed: 1274000, color: "#10B981", key: "newplant" },
 };
 
-// Initialize on page load
+const revenue = (volume) => PRICE * volume;
+const totalCost = (option, volume) => option.fixed + option.vc * volume;
+const profit = (option, volume) => revenue(volume) - totalCost(option, volume);
+const breakeven = (option) => option.fixed / (PRICE - option.vc);
+const contributionMargin = (option) => PRICE - option.vc;
+
+const demandScenarios = {
+  low: 350000,
+  medium: 500000,
+  high: 650000,
+};
+
+// Initialize
 document.addEventListener('DOMContentLoaded', () => {
-  calculate();
+  updateAll(500000);
 });
 
-// Calculate contribution margin and break-even volume
-function calculate() {
-  const fixedCosts = parseFloat(document.getElementById('fixed-costs').value) || 0;
-  const sellingPrice = parseFloat(document.getElementById('selling-price').value) || 0;
-  const variableCost = parseFloat(document.getElementById('variable-cost').value) || 0;
+// Select volume
+function selectVolume(volume) {
+  // Update button states
+  document.querySelectorAll('.volume-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (parseInt(btn.dataset.volume) === volume) {
+      btn.classList.add('active');
+    }
+  });
 
-  // Contribution Margin = Selling Price - Variable Cost
-  const contributionMargin = sellingPrice - variableCost;
-
-  // Break-Even Volume = Fixed Costs / Contribution Margin
-  let breakevenVolume = 0;
-  let isError = false;
-
-  if (contributionMargin > 0) {
-    breakevenVolume = Math.ceil(fixedCosts / contributionMargin);
-  } else {
-    isError = true;
-  }
-
-  // Update displays
-  document.getElementById('contribution-margin').textContent = '$' + contributionMargin.toFixed(2);
-
-  const resultRow = document.querySelector('.calc-row.result');
-  if (isError) {
-    document.getElementById('breakeven-volume').textContent = 'Price must exceed variable cost';
-    resultRow.classList.add('error');
-  } else {
-    document.getElementById('breakeven-volume').textContent = breakevenVolume.toLocaleString();
-    resultRow.classList.remove('error');
-  }
+  updateAll(volume);
 }
 
-// Show info modal
-function showInfo(type) {
-  const info = infoContent[type];
-  if (info) {
-    document.getElementById('modal-title').textContent = info.title;
-    document.getElementById('modal-text').textContent = info.text;
-    document.getElementById('info-modal').classList.add('open');
-  }
+// Update all displays
+function updateAll(volume) {
+  updateVolumeDisplay(volume);
+  updateFormulaBoxes(volume);
+  updateProfitAnalysis(volume);
 }
 
-// Close info modal
-function closeInfo(event) {
-  if (!event || event.target === document.getElementById('info-modal')) {
-    document.getElementById('info-modal').classList.remove('open');
-  }
+// Update formula boxes (Revenue, Variable Cost, Fixed Cost)
+function updateFormulaBoxes(volume) {
+  Object.values(options).forEach(option => {
+    // Revenue (same for all options)
+    const rev = revenue(volume);
+    document.getElementById(`revenue-${option.key}`).textContent = formatCurrency(rev);
+
+    // Variable Cost
+    const vc = option.vc * volume;
+    document.getElementById(`vc-${option.key}`).textContent = formatCurrency(vc);
+
+    // Fixed Cost
+    document.getElementById(`fc-${option.key}`).textContent = formatCurrency(option.fixed);
+  });
 }
 
-// Close modal on Escape key
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    closeInfo();
+// Format currency
+function formatCurrency(value) {
+  const absValue = Math.abs(value);
+  if (absValue >= 1000000) {
+    return (value < 0 ? '-' : '') + '$' + (absValue / 1000000).toFixed(2) + 'M';
+  } else if (absValue >= 1000) {
+    return (value < 0 ? '-' : '') + '$' + (absValue / 1000).toFixed(0) + 'K';
   }
-});
+  return '$' + value.toFixed(0);
+}
+
+// Format number with commas
+function formatNumber(value) {
+  return value.toLocaleString();
+}
+
+// Update volume display
+function updateVolumeDisplay(volume) {
+  document.getElementById('analysis-volume').textContent = formatNumber(volume);
+}
+
+// Update profit analysis
+function updateProfitAnalysis(volume) {
+  Object.values(options).forEach(option => {
+    const p = profit(option, volume);
+    const rev = revenue(volume);
+    const cost = totalCost(option, volume);
+
+    const valueEl = document.getElementById(`profit-${option.key}`);
+    const breakdownEl = document.getElementById(`breakdown-${option.key}`);
+
+    valueEl.textContent = formatCurrency(p);
+    valueEl.className = 'profit-value ' + (p >= 0 ? 'positive' : 'negative');
+
+    breakdownEl.textContent = `Revenue: ${formatCurrency(rev)} | Cost: ${formatCurrency(cost)}`;
+  });
+}
+
+// Update break-even bars
+function updateBreakevenBars() {
+  const maxBE = 500000; // Scale for visualization
+
+  Object.values(options).forEach(option => {
+    const be = breakeven(option);
+    document.getElementById(`be-${option.key}`).textContent = formatNumber(Math.round(be)) + ' units';
+    document.getElementById(`bar-${option.key}`).style.width = (be / maxBE * 100) + '%';
+  });
+}
+
+// Update scenarios table
+function updateScenarios() {
+  const scenarios = ['low', 'medium', 'high'];
+
+  scenarios.forEach(scenario => {
+    const volume = demandScenarios[scenario];
+    let bestProfit = -Infinity;
+    let bestOption = null;
+
+    // Find best option for this scenario
+    Object.values(options).forEach(option => {
+      const p = profit(option, volume);
+      if (p > bestProfit) {
+        bestProfit = p;
+        bestOption = option.key;
+      }
+    });
+
+    // Update cells
+    Object.values(options).forEach(option => {
+      const p = profit(option, volume);
+      const cell = document.getElementById(`scenario-${option.key}-${scenario}`);
+      cell.textContent = formatCurrency(p);
+
+      // Reset classes
+      cell.className = 'cell';
+
+      if (p >= 0) {
+        if (option.key === bestOption) {
+          cell.classList.add('best');
+        } else {
+          cell.classList.add('positive');
+        }
+      } else {
+        cell.classList.add('negative');
+      }
+    });
+  });
+}
+

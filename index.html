@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Break-Even Calculator</title>
+  <title>Break-Even Analysis</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,83 +12,137 @@
 <body>
   <div class="container">
     <header>
-      <h1>Break-Even Calculator</h1>
-      <p class="subtitle">Find out how many units you need to sell to cover your costs</p>
+      <h1>Break-Even Analysis</h1>
+      <p class="subtitle">Compare manufacturing options to find your optimal strategy</p>
     </header>
 
-    <div class="calculator-card">
-      <!-- Row 1: Fixed Costs -->
-      <div class="calc-row">
-        <div class="row-label">
-          <span>Fixed Costs</span>
-          <button class="info-btn" onclick="showInfo('fixed')">?</button>
-        </div>
-        <div class="row-input">
-          <span class="currency-prefix">$</span>
-          <input type="number" id="fixed-costs" value="450000" onchange="calculate()" oninput="calculate()">
-        </div>
+    <!-- Options Legend -->
+    <div class="options-legend">
+      <div class="option-badge copacker">
+        <span class="dot"></span>
+        <span class="name">Co-Packer</span>
       </div>
-
-      <!-- Row 2: Selling Price -->
-      <div class="calc-row">
-        <div class="row-label">
-          <span>Selling Price per Unit</span>
-          <button class="info-btn" onclick="showInfo('price')">?</button>
-        </div>
-        <div class="row-input">
-          <span class="currency-prefix">$</span>
-          <input type="number" id="selling-price" value="4.00" step="0.01" onchange="calculate()" oninput="calculate()">
-        </div>
+      <div class="option-badge retrofit">
+        <span class="dot"></span>
+        <span class="name">Retrofit</span>
       </div>
-
-      <!-- Row 3: Variable Cost -->
-      <div class="calc-row">
-        <div class="row-label">
-          <span>Variable Cost per Unit</span>
-          <button class="info-btn" onclick="showInfo('variable')">?</button>
-        </div>
-        <div class="row-input">
-          <span class="currency-prefix">$</span>
-          <input type="number" id="variable-cost" value="2.80" step="0.01" onchange="calculate()" oninput="calculate()">
-        </div>
+      <div class="option-badge newplant">
+        <span class="dot"></span>
+        <span class="name">New Plant</span>
       </div>
+    </div>
 
-      <div class="calc-divider"></div>
-
-      <!-- Row 4: Contribution Margin (Calculated) -->
-      <div class="calc-row calculated">
-        <div class="row-label">
-          <span>Contribution Margin</span>
-          <button class="info-btn" onclick="showInfo('margin')">?</button>
-        </div>
-        <div class="row-output">
-          <span id="contribution-margin">$1.20</span>
-          <span class="per-unit">per unit</span>
-        </div>
+    <!-- Volume Selector -->
+    <div class="card volume-card">
+      <label>Select Production Volume</label>
+      <div class="volume-buttons">
+        <button class="volume-btn" data-volume="350000" onclick="selectVolume(350000)">
+          <span class="vol-label">Low</span>
+          <span class="vol-value">350,000</span>
+        </button>
+        <button class="volume-btn active" data-volume="500000" onclick="selectVolume(500000)">
+          <span class="vol-label">Medium</span>
+          <span class="vol-value">500,000</span>
+        </button>
+        <button class="volume-btn" data-volume="650000" onclick="selectVolume(650000)">
+          <span class="vol-label">High</span>
+          <span class="vol-value">650,000</span>
+        </button>
       </div>
+    </div>
 
-      <!-- Row 5: Break-Even Volume (Calculated) -->
-      <div class="calc-row calculated result">
-        <div class="row-label">
-          <span>Break-Even Volume</span>
-          <button class="info-btn" onclick="showInfo('breakeven')">?</button>
+    <!-- Revenue Box -->
+    <div class="card formula-card">
+      <div class="formula-header">
+        <h2>Revenue</h2>
+        <span class="formula-equation">Units × Price ($4.00)</span>
+      </div>
+      <div class="formula-grid">
+        <div class="formula-item copacker">
+          <div class="formula-label">Co-Packer</div>
+          <div class="formula-value" id="revenue-copacker">$2.00M</div>
         </div>
-        <div class="row-output">
-          <span id="breakeven-volume">375,000</span>
-          <span class="per-unit">units</span>
+        <div class="formula-item retrofit">
+          <div class="formula-label">Retrofit</div>
+          <div class="formula-value" id="revenue-retrofit">$2.00M</div>
+        </div>
+        <div class="formula-item newplant">
+          <div class="formula-label">New Plant</div>
+          <div class="formula-value" id="revenue-newplant">$2.00M</div>
         </div>
       </div>
     </div>
 
-    <!-- Info Modal -->
-    <div class="modal" id="info-modal" onclick="closeInfo(event)">
-      <div class="modal-content">
-        <button class="modal-close" onclick="closeInfo()">&times;</button>
-        <h3 id="modal-title">Title</h3>
-        <p id="modal-text">Description</p>
+    <!-- Variable Cost Box -->
+    <div class="card formula-card">
+      <div class="formula-header">
+        <h2>Variable Cost</h2>
+        <span class="formula-equation">Units × Variable Cost per Unit</span>
+      </div>
+      <div class="formula-grid">
+        <div class="formula-item copacker">
+          <div class="formula-label">Co-Packer</div>
+          <div class="formula-value negative" id="vc-copacker">$1.40M</div>
+          <div class="formula-detail">× $2.80/unit</div>
+        </div>
+        <div class="formula-item retrofit">
+          <div class="formula-label">Retrofit</div>
+          <div class="formula-value negative" id="vc-retrofit">$900K</div>
+          <div class="formula-detail">× $1.80/unit</div>
+        </div>
+        <div class="formula-item newplant">
+          <div class="formula-label">New Plant</div>
+          <div class="formula-value negative" id="vc-newplant">$400K</div>
+          <div class="formula-detail">× $0.80/unit</div>
+        </div>
       </div>
     </div>
-  </div>
+
+    <!-- Fixed Cost Box -->
+    <div class="card formula-card">
+      <div class="formula-header">
+        <h2>Fixed Cost</h2>
+        <span class="formula-equation">Does not change with volume</span>
+      </div>
+      <div class="formula-grid">
+        <div class="formula-item copacker">
+          <div class="formula-label">Co-Packer</div>
+          <div class="formula-value negative" id="fc-copacker">$450K</div>
+        </div>
+        <div class="formula-item retrofit">
+          <div class="formula-label">Retrofit</div>
+          <div class="formula-value negative" id="fc-retrofit">$888K</div>
+        </div>
+        <div class="formula-item newplant">
+          <div class="formula-label">New Plant</div>
+          <div class="formula-value negative" id="fc-newplant">$1.27M</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profit Analysis at Current Volume -->
+    <div class="card analysis-card">
+      <h2>Profit Analysis at <span id="analysis-volume">500,000</span> units</h2>
+      <div class="profit-grid">
+        <div class="profit-item copacker">
+          <div class="profit-label">Co-Packer</div>
+          <div class="profit-value" id="profit-copacker">$0</div>
+          <div class="profit-breakdown" id="breakdown-copacker"></div>
+        </div>
+        <div class="profit-item retrofit">
+          <div class="profit-label">Retrofit</div>
+          <div class="profit-value" id="profit-retrofit">$0</div>
+          <div class="profit-breakdown" id="breakdown-retrofit"></div>
+        </div>
+        <div class="profit-item newplant">
+          <div class="profit-label">New Plant</div>
+          <div class="profit-value" id="profit-newplant">$0</div>
+          <div class="profit-breakdown" id="breakdown-newplant"></div>
+        </div>
+      </div>
+    </div>
+
+    </div>
 
   <script src="app.js"></script>
 </body>
