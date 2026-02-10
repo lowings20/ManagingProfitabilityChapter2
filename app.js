@@ -43,8 +43,6 @@ function selectVolume(volume) {
 function updateAll(volume) {
   updateVolumeDisplay(volume);
   updateProfitAnalysis(volume);
-  updateBreakevenBars();
-  updateScenarios();
 }
 
 // Format currency
