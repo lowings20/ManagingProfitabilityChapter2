@@ -122,11 +122,6 @@ header h1 {
   font-size: 14px;
 }
 
-.option-badge .details {
-  font-size: 12px;
-  color: var(--color-gray-600);
-}
-
 /* Cards */
 .card {
   background: var(--color-white);
@@ -250,12 +245,11 @@ header h1 {
   padding: 8px 6px;
   border-radius: 6px;
   background: var(--color-white);
-  border-left: 3px solid;
 }
 
-.formula-item.copacker { border-left-color: var(--color-copacker); }
-.formula-item.retrofit { border-left-color: var(--color-retrofit); }
-.formula-item.newplant { border-left-color: var(--color-newplant); }
+.formula-item.copacker { background: rgba(59, 130, 246, 0.08); }
+.formula-item.retrofit { background: rgba(245, 158, 11, 0.08); }
+.formula-item.newplant { background: rgba(16, 185, 129, 0.08); }
 
 .formula-label {
   font-size: 11px;
@@ -291,12 +285,11 @@ header h1 {
   text-align: center;
   padding: 20px 16px;
   border-radius: 8px;
-  background: var(--color-gray-100);
 }
 
-.profit-item.copacker { border-left: 4px solid var(--color-copacker); }
-.profit-item.retrofit { border-left: 4px solid var(--color-retrofit); }
-.profit-item.newplant { border-left: 4px solid var(--color-newplant); }
+.profit-item.copacker { background: rgba(59, 130, 246, 0.1); border-top: 3px solid var(--color-copacker); }
+.profit-item.retrofit { background: rgba(245, 158, 11, 0.1); border-top: 3px solid var(--color-retrofit); }
+.profit-item.newplant { background: rgba(16, 185, 129, 0.1); border-top: 3px solid var(--color-newplant); }
 
 .profit-label {
   font-size: 13px;
