@@ -42,7 +42,24 @@ function selectVolume(volume) {
 // Update all displays
 function updateAll(volume) {
   updateVolumeDisplay(volume);
+  updateFormulaBoxes(volume);
   updateProfitAnalysis(volume);
+}
+
+// Update formula boxes (Revenue, Variable Cost, Fixed Cost)
+function updateFormulaBoxes(volume) {
+  Object.values(options).forEach(option => {
+    // Revenue (same for all options)
+    const rev = revenue(volume);
+    document.getElementById(`revenue-${option.key}`).textContent = formatCurrency(rev);
+
+    // Variable Cost
+    const vc = option.vc * volume;
+    document.getElementById(`vc-${option.key}`).textContent = formatCurrency(vc);
+
+    // Fixed Cost
+    document.getElementById(`fc-${option.key}`).textContent = formatCurrency(option.fixed);
+  });
 }
 
 // Format currency

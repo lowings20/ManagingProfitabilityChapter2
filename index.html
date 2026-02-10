@@ -54,6 +54,75 @@
       </div>
     </div>
 
+    <!-- Revenue Box -->
+    <div class="card formula-card">
+      <div class="formula-header">
+        <h2>Revenue</h2>
+        <span class="formula-equation">Units × Price ($4.00)</span>
+      </div>
+      <div class="formula-grid">
+        <div class="formula-item copacker">
+          <div class="formula-label">Co-Packer</div>
+          <div class="formula-value" id="revenue-copacker">$2.00M</div>
+        </div>
+        <div class="formula-item retrofit">
+          <div class="formula-label">Retrofit</div>
+          <div class="formula-value" id="revenue-retrofit">$2.00M</div>
+        </div>
+        <div class="formula-item newplant">
+          <div class="formula-label">New Plant</div>
+          <div class="formula-value" id="revenue-newplant">$2.00M</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Variable Cost Box -->
+    <div class="card formula-card">
+      <div class="formula-header">
+        <h2>Variable Cost</h2>
+        <span class="formula-equation">Units × Variable Cost per Unit</span>
+      </div>
+      <div class="formula-grid">
+        <div class="formula-item copacker">
+          <div class="formula-label">Co-Packer</div>
+          <div class="formula-value negative" id="vc-copacker">$1.40M</div>
+          <div class="formula-detail">× $2.80/unit</div>
+        </div>
+        <div class="formula-item retrofit">
+          <div class="formula-label">Retrofit</div>
+          <div class="formula-value negative" id="vc-retrofit">$900K</div>
+          <div class="formula-detail">× $1.80/unit</div>
+        </div>
+        <div class="formula-item newplant">
+          <div class="formula-label">New Plant</div>
+          <div class="formula-value negative" id="vc-newplant">$400K</div>
+          <div class="formula-detail">× $0.80/unit</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fixed Cost Box -->
+    <div class="card formula-card">
+      <div class="formula-header">
+        <h2>Fixed Cost</h2>
+        <span class="formula-equation">Does not change with volume</span>
+      </div>
+      <div class="formula-grid">
+        <div class="formula-item copacker">
+          <div class="formula-label">Co-Packer</div>
+          <div class="formula-value negative" id="fc-copacker">$450K</div>
+        </div>
+        <div class="formula-item retrofit">
+          <div class="formula-label">Retrofit</div>
+          <div class="formula-value negative" id="fc-retrofit">$888K</div>
+        </div>
+        <div class="formula-item newplant">
+          <div class="formula-label">New Plant</div>
+          <div class="formula-value negative" id="fc-newplant">$1.27M</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Profit Analysis at Current Volume -->
     <div class="card analysis-card">
       <h2>Profit Analysis at <span id="analysis-volume">500,000</span> units</h2>
