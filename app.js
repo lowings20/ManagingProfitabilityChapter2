@@ -4,9 +4,9 @@
 const PRICE = 4.00;
 
 const options = {
-  coPacker: { name: "Co-Packer", vc: 2.80, fixed: 450000, color: "#3B82F6", key: "copacker" },
-  retrofit: { name: "Retrofit", vc: 1.80, fixed: 888000, color: "#F59E0B", key: "retrofit" },
-  newPlant: { name: "New Plant", vc: 0.80, fixed: 1274000, color: "#10B981", key: "newplant" },
+  coPacker: { name: "Co-Packer", vc: 2.70, fixed: 450000, color: "#3B82F6", key: "copacker" },
+  retrofit: { name: "Retrofit", vc: 2.10, fixed: 793000, color: "#F59E0B", key: "retrofit" },
+  newPlant: { name: "New Plant", vc: 1.10, fixed: 1203000, color: "#10B981", key: "newplant" },
 };
 
 const revenue = (volume) => PRICE * volume;
